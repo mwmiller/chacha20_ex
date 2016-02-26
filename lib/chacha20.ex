@@ -30,10 +30,10 @@ defmodule Chacha20 do
 
   * The shared key
   * The session nonce
-  * The last used block number
-  * The unused portion of the above block number
+  * The next block number
+  * The unused portion of the current block
 
-  Note that block 0 is undefined, so the initial state is `{k,n,0,""}`
+  Note that block 0 is the first block, so the initial state is `{k,n,0,""}`
   """
   @type chacha_parameters :: {key, nonce, non_neg_integer, binary}
 
@@ -114,9 +114,9 @@ defmodule Chacha20 do
   The operations are symmetric, so if `crypt(m,k,n) = c`, then `crypt(c,k,n) = m`
   """
 
-  @spec crypt(binary, key, nonce) :: binary
-  def crypt(m,k,n) do
-    {s, _p} = crypt_bytes(m,{k,n,0,""},[])
+  @spec crypt(binary, key, nonce, non_neg_integer) :: binary
+  def crypt(m,k,n,c \\ 0) do
+    {s, _p} = crypt_bytes(m,{k,n,c,""},[])
     s
   end
 
@@ -130,7 +130,7 @@ defmodule Chacha20 do
 
   @spec crypt_bytes(binary, chacha_parameters, [binary]) :: {binary, chacha_parameters}
   def crypt_bytes(<<>>,p,acc), do: {(acc |> Enum.reverse |> Enum.join), p}
-  def crypt_bytes(m,{k,n,u,<<>>}, acc), do: crypt_bytes(m,{k,n,u+1,block(k,n,u+1)},acc)
+  def crypt_bytes(m,{k,n,u,<<>>}, acc), do: crypt_bytes(m,{k,n,u+1,block(k,n,u)},acc)
   def crypt_bytes(<<m,restm::binary>>, {k,n,u,<<b,restb::binary>>},acc), do: crypt_bytes(restm, {k,n,u,restb}, [<< bxor(m,b) >> | acc])
 
 end

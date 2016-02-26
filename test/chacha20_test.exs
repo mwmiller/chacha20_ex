@@ -9,7 +9,7 @@ defmodule Chacha20Test do
 
     encrypted = crypt("secret message", k, n)
 
-    assert encrypted == <<32, 2, 229, 62, 139, 95, 158, 111, 157, 152, 61, 116, 173, 188>>
+    assert encrypted == <<140, 84, 30, 226, 54, 20, 142, 173, 31, 198, 174, 17, 77, 140>>
     assert encrypted |> crypt(k,n) == "secret message"
 
   end
@@ -21,7 +21,7 @@ defmodule Chacha20Test do
     {s,p} = crypt_bytes("sec", {k,n,0,""},[])
     {full_message, _,} = crypt_bytes("ret message", p, [s])
 
-    assert full_message == <<32, 2, 229, 62, 139, 95, 158, 111, 157, 152, 61, 116, 173, 188>>
+    assert full_message == <<140, 84, 30, 226, 54, 20, 142, 173, 31, 198, 174, 17, 77, 140>>
   end
 
   test "reference version" do
@@ -30,7 +30,7 @@ defmodule Chacha20Test do
 
     encrypted = crypt("secret message", k, n)
 
-    assert encrypted == <<86, 106, 88, 28, 178, 149, 2, 246, 179, 70, 64, 248, 181, 170>>
+    assert encrypted == <<173, 65, 29, 62, 161, 111, 223, 87, 250, 120, 1, 164, 202, 17>>
     assert encrypted |> crypt(k,n) == "secret message"
 
     {s,p} = crypt_bytes("sec", {k,n,0,""},[])
