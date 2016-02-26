@@ -21,8 +21,10 @@ defmodule Chacha20 do
   The shared per-session nonce.
 
   By spec, this nonce may be used to encrypt a stream of up to 256GiB
+
+  An eight-byte nonce is compatible with the original reference implementation.
   """
-  @type nonce :: <<_::12 * 8 >>
+  @type nonce :: <<_::12 * 8 >> | <<_::8 * 8 >>
   @typedoc """
   The parameters and state of the current session
 
@@ -86,7 +88,8 @@ defmodule Chacha20 do
   defp extract_binary(i,n),             do: extract_chars(i,n,[]) |> Enum.reverse |> Enum.join
 
   @doc false
-  def block(k,n,b) when byte_size(k) == 32 and byte_size(n) == 12 do
+  @spec block(key, nonce, non_neg_integer) :: binary
+  def block(k,n,b) when byte_size(k) == 32 do
     xs = expand(k,n,b)
     doublerounds(xs, 10) |> Enum.zip(xs) |> Enum.reduce(<<>>,fn({z,x}, acc) ->acc <> (sum(x,z) |> littleendian_inv) end)
   end
@@ -95,12 +98,13 @@ defmodule Chacha20 do
   defp words_as_ints(<<word::size(32),rest::binary>>, acc), do: words_as_ints(rest, [(word |> extract_binary(4)|> littleendian)|acc])
 
   @doc false
-  def expand(k,n,b) do
+  def expand(k,n,b) when byte_size(n) == 12 do
     cs = "expand 32-byte k"
     bs = extract_chars(b,4,[]) |> Enum.join
 
     words_as_ints(cs<>k<>bs<>n, [])
   end
+  def expand(k,n,b) when byte_size(n) == 8, do: expand(k, <<0,0,0,0>><>n, b)
 
   @doc """
   The crypt function suitable for a complete message.
