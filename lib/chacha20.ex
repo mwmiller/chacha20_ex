@@ -33,7 +33,7 @@ defmodule Chacha20 do
   * The next block number
   * The unused portion of the current block
 
-  Note that block 0 is the first block, so the initial state is `{k,n,0,""}`
+  To start from block 0, the initial state is `{k,n,0,""}`
   """
   @type chacha_parameters :: {key, nonce, non_neg_integer, binary}
 
@@ -54,18 +54,18 @@ defmodule Chacha20 do
   end
   @doc false
   def diaground([y0,y1,y2,y3,y4,y5,y6,y7,y8,y9,y10,y11,y12,y13,y14,y15]) do
-    [z0, z5, z10, z15] = quarterround([y0, y5, y10, y15])
-    [z1, z6, z11, z12] = quarterround([y1, y6, y11, y12])
-    [z2, z7, z8, z13] = quarterround([y2, y7, y8, y13])
-    [z3, z4, z9, z14] = quarterround([y3, y4, y9, y14])
+    [z0, z5, z10, z15]  = quarterround([y0, y5, y10, y15])
+    [z1, z6, z11, z12]  = quarterround([y1, y6, y11, y12])
+    [z2, z7,  z8, z13]  = quarterround([y2, y7, y8, y13])
+    [z3, z4,  z9, z14]  = quarterround([y3, y4, y9, y14])
 
     [z0,z1,z2,z3,z4,z5,z6,z7,z8,z9,z10,z11,z12,z13,z14,z15]
   end
 
   @doc false
   def columnround([x0,x1,x2,x3,x4,x5,x6,x7,x8,x9,x10,x11,x12,x13,x14,x15]) do
-    [y0, y4, y8, y12] = quarterround([x0, x4, x8, x12])
-    [y1, y5, y9, y13] = quarterround([x1, x5, x9, x13])
+    [y0, y4,  y8, y12] = quarterround([x0, x4, x8, x12])
+    [y1, y5,  y9, y13] = quarterround([x1, x5, x9, x13])
     [y2, y6, y10, y14] = quarterround([x2, x6, x10, x14])
     [y3, y7, y11, y15] = quarterround([x3, x7, x11, x15])
 
