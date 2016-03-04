@@ -87,7 +87,11 @@ defmodule Chacha20 do
   defp extract_chars(i, n, acc),        do: extract_chars(i, n-1, [<< (bsr(i,8*(n-1)) &&& 0xff) >> | acc ])
   defp extract_binary(i,n),             do: extract_chars(i,n,[]) |> Enum.reverse |> Enum.join
 
-  @doc false
+  @doc """
+  Return an arbitrary block
+
+  This is probably most useful in fast-forwarding a stream.
+  """
   @spec block(key, nonce, non_neg_integer) :: binary
   def block(k,n,b) when byte_size(k) == 32 do
     xs = expand(k,n,b)
