@@ -80,12 +80,9 @@ defmodule Chacha20 do
   def doublerounds(x, n), do: x |> doubleround |> doublerounds(n-1)
 
   @doc false
-  def littleendian(<< b0,b1,b2,b3 >>),  do: b0 + (b1 <<< 8) + (b2 <<< 16) + (b3 <<< 24)
-  @doc false
-  def littleendian_inv(i),              do: extract_chars(i,4,[]) |> Enum.join
-  defp extract_chars(_i, 0, acc),       do: acc
-  defp extract_chars(i, n, acc),        do: extract_chars(i, n-1, [<< (bsr(i,8*(n-1)) &&& 0xff) >> | acc ])
-  defp extract_binary(i,n),             do: extract_chars(i,n,[]) |> Enum.reverse |> Enum.join
+  def littleendian_inv(i), do: i |> :binary.encode_unsigned(:little) |> pad(4)
+  defp pad(s,n) when (byte_size(s) |> rem(n)) == 0, do: s
+  defp pad(s,n), do: pad(s<><<0>>,n)
 
   @doc """
   Return an arbitrary block
@@ -99,14 +96,13 @@ defmodule Chacha20 do
   end
 
   defp words_as_ints(<<>>, acc), do: acc |> Enum.reverse
-  defp words_as_ints(<<word::size(32),rest::binary>>, acc), do: words_as_ints(rest, [(word |> extract_binary(4)|> littleendian)|acc])
+  defp words_as_ints(<<word::unsigned-little-integer-size(32),rest::binary>>, acc), do: words_as_ints(rest, [word|acc])
 
   @doc false
   def expand(k,n,b) when byte_size(n) == 12 do
     cs = "expand 32-byte k"
-    bs = extract_chars(b,4,[]) |> Enum.join
 
-    words_as_ints(cs<>k<>bs<>n, [])
+    words_as_ints(cs<>k<>littleendian_inv(b)<>n, [])
   end
   def expand(k,n,b) when byte_size(n) == 8, do: expand(k, <<0,0,0,0>><>n, b)
 
