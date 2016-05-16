@@ -3,7 +3,7 @@ defmodule Chacha20.Mixfile do
 
   def project do
     [app: :chacha20,
-     version: "0.3.1",
+     version: "0.3.2",
      elixir: "~> 1.2",
      name: "Chacha20",
      source_url: "https://github.com/mwmiller/chacha20_ex",
@@ -20,8 +20,8 @@ defmodule Chacha20.Mixfile do
 
   defp deps do
     [
-      {:earmark, ">= 0.0.0", only: :dev},
-      {:ex_doc, "~> 0.11.4", only: :dev},
+      {:earmark, "~> 0.2", only: :dev},
+      {:ex_doc, "~> 0.11", only: :dev},
       {:power_assert, "~> 0.0.8", only: :test},
     ]
   end
