@@ -16,7 +16,7 @@ defmodule Chacha20 do
   The shared encryption key.
 
   """
-  @type key :: <<_::32 * 8 >>
+  @type key :: binary
   @typedoc """
   The shared per-session nonce.
 
@@ -24,7 +24,7 @@ defmodule Chacha20 do
 
   An eight-byte nonce is compatible with the original reference implementation.
   """
-  @type nonce :: <<_::12 * 8 >> | <<_::8 * 8 >>
+  @type nonce :: binary
   @typedoc """
   The parameters and state of the current session
 

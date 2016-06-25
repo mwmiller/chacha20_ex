@@ -1,5 +1,5 @@
 defmodule Chacha20Test do
-  use PowerAssert
+  use ExUnit.Case
   doctest Chacha20
   import Chacha20
 

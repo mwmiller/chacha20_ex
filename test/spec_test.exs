@@ -1,5 +1,5 @@
 defmodule SpecTest do
-  use PowerAssert
+  use ExUnit.Case
   doctest Chacha20
   import Chacha20
   import VectorHelper
