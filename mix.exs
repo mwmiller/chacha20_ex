@@ -3,15 +3,15 @@ defmodule Chacha20.Mixfile do
 
   def project do
     [app: :chacha20,
-     version: "0.3.5",
-     elixir: "~> 1.3",
+     version: "0.3.6",
+     elixir: "~> 1.4",
      name: "Chacha20",
      source_url: "https://github.com/mwmiller/chacha20_ex",
      build_embedded: Mix.env == :prod,
      start_permanent: Mix.env == :prod,
-     description: description,
-     package: package,
-     deps: deps]
+     description: description(),
+     package: package(),
+     deps: deps()]
   end
 
   def application do
