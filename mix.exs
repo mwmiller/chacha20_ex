@@ -3,7 +3,7 @@ defmodule Chacha20.Mixfile do
 
   def project do
     [app: :chacha20,
-     version: "0.3.6",
+     version: "1.0.0",
      elixir: "~> 1.4",
      name: "Chacha20",
      source_url: "https://github.com/mwmiller/chacha20_ex",
