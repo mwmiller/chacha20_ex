@@ -22,9 +22,7 @@ defmodule Chacha20.Mixfile do
 
   defp deps do
     [
-      {:earmark, "~> 1.0", only: :dev},
       {:ex_doc, "~> 0.15", only: :dev},
-      {:credo, "~> 1.0", only: [:dev, :test]}
     ]
   end
 
