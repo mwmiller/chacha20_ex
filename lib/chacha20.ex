@@ -41,13 +41,13 @@ defmodule Chacha20 do
   @doc false
   def quarterround([a, b, c, d]) do
     a = sum(a, b)
-    d = rotl(d ^^^ a, 16)
+    d = rotl(bxor(d, a), 16)
     c = sum(c, d)
-    b = rotl(b ^^^ c, 12)
+    b = rotl(bxor(b, c), 12)
     a = sum(a, b)
-    d = rotl(d ^^^ a, 8)
+    d = rotl(bxor(d, a), 8)
     c = sum(c, d)
-    b = rotl(b ^^^ c, 7)
+    b = rotl(bxor(b, c), 7)
 
     [a, b, c, d]
   end
@@ -93,7 +93,9 @@ defmodule Chacha20 do
   def block(k, n, b) when byte_size(k) == 32 do
     xs = expand(k, n, b)
 
-    xs |> doublerounds(10) |> Enum.zip(xs)
+    xs
+    |> doublerounds(10)
+    |> Enum.zip(xs)
     |> Enum.reduce(<<>>, fn {z, x}, acc -> acc <> littleendian_inv(sum(x, z)) end)
   end
 
