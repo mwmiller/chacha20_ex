@@ -1,4 +1,4 @@
-defmodule Chacha20.Mixfile do
+defmodule Chacha20.MixProject do
   use Mix.Project
 
   def project do
@@ -22,7 +22,7 @@ defmodule Chacha20.Mixfile do
 
   defp deps do
     [
-      {:ex_doc, "~> 0.15", only: :dev},
+      {:ex_doc, "~> 0.15", only: :dev}
     ]
   end
 
